@@ -13,7 +13,7 @@ git clone https://github.com/madaibaba/hadoop-on-docker
 #### 2. Pull Docker Image
 
 ```
-sudo docker pull madaibaba/hadoop-one-docker:1.0
+sudo docker pull madaibaba/hadoop-one-docker:2.0
 ```
 
 #### 3. Create My Bridge Network
