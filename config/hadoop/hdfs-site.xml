@@ -14,4 +14,32 @@
         <name>dfs.replication</name>
         <value>2</value>
     </property>
+    <property>
+        <name>dfs.namenode.accesstime.precision</name>
+        <value>3600000</value>
+    </property>
+    <property>
+        <name>nfs.dump.dir</name>
+        <value>/tmp/.hdfs-nfs</value>
+    </property>
+    <property>
+        <name>nfs.exports.allowed.hosts</name>
+        <value>* rw</value>
+    </property>
+    <property>
+        <name>nfs.superuser</name>
+        <value>root</value>
+    </property>
+    <property>
+        <name>nfs.metrics.percentiles.intervals</name>
+        <value>100</value>
+    </property>
+    <property>
+        <name>nfs.rtmax</name>
+        <value>1048576</value>
+    </property>
+    <property>
+        <name>nfs.wtmax</name>
+        <value>65536</value>
+    </property>
 </configuration>

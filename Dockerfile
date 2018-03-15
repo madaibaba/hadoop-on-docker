@@ -1,17 +1,15 @@
-FROM centos:7.4.1708
+FROM centos:7
 
 MAINTAINER houalex <houalex@gmail.com>
 
 WORKDIR /root
 
 # install openssh-server, openjdk and wget
-ENV DEBIAN_FRONTEND=noninteractive
 RUN yum -y update
-RUN yum install -y bash which openssh-server openssh-clients java-1.8.0-openjdk java-1.8.0-openjdk-devel wget
+RUN yum install -y bash which openssh-server openssh-clients java-1.8.0-openjdk java-1.8.0-openjdk-devel wget initscripts nfs-utils rpcbind
 
 # config sshd
 RUN sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
-# RUN sed -i 's/.*session.*required.*pam_loginuid.so.*/session optional pam_loginuid.so/g' /etc/pam.d/sshd
 RUN mkdir /var/run/sshd
 RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
 RUN ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key
@@ -57,7 +55,9 @@ RUN mv /tmp/hadoop/ssh_config ~/.ssh/config && \
     mv /tmp/hadoop/yarn-site.xml $HADOOP_HOME/etc/hadoop/yarn-site.xml && \
     mv /tmp/hadoop/start-hadoop.sh ~/start-hadoop.sh && \
     mv /tmp/hadoop/stop-hadoop.sh ~/stop-hadoop.sh && \
-    mv /tmp/hadoop/run-wordcount.sh ~/run-wordcount.sh
+    mv /tmp/hadoop/run-wordcount.sh ~/run-wordcount.sh && \
+    echo "log4j.logger.org.apache.hadoop.hdfs.nfs=DEBUG" >> $HADOOP_HOME/etc/hadoop/log4j.properties && \
+    echo "log4j.logger.org.apache.hadoop.oncrpc=DEBUG" >> $HADOOP_HOME/etc/hadoop/log4j.properties
 
 RUN chmod +x ~/start-hadoop.sh && \
     chmod +x ~/stop-hadoop.sh && \
@@ -69,4 +69,8 @@ RUN chmod +x ~/start-hadoop.sh && \
 # format namenode
 RUN /usr/local/hadoop/bin/hadoop namenode -format
 
-CMD /usr/sbin/sshd -D
+RUN systemctl enable sshd.service && \
+    systemctl disable rpcbind.service && \
+    systemctl disable nfs.service
+
+CMD /usr/sbin/init

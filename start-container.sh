@@ -22,7 +22,8 @@ sudo docker run -itd \
                 -p 10022:22 \
                 --name hadoop-master \
                 --hostname hadoop-master \
-                madaibaba/hadoop-on-docker:1.0 &> /dev/null
+                --privileged \
+                madaibaba/hadoop-on-docker:2.0 &> /dev/null
 
 
 # start hadoop slave container
@@ -35,7 +36,8 @@ do
 	                --net=mybridge \
 	                --name hadoop-slave$i \
 	                --hostname hadoop-slave$i \
-	                madaibaba/hadoop-on-docker:1.0 &> /dev/null
+	                --privileged \
+	                madaibaba/hadoop-on-docker:2.0 &> /dev/null
 	i=$(( $i + 1 ))
 done 
 
